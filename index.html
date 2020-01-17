@@ -54,6 +54,13 @@
     </div>
 	<div role="main" class="ui-content">
 		<h2>Home</h2>	
+		<p id="user_alert" style="color: red;"></p>
+		<script>
+		if(parseInt(localStorage.getItem('RU.credit'))<3){
+		  $('#user_alert').html('Attention: You have fewer credits !!!');
+		  
+		}
+	</script>
 		<a href="#rechargePop" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-icon-recycle ui-btn-icon-left" data-rel="popup">Recharge credit</a>
 		<a href="#popupBarcode" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-btn-a ui-shadow ui-icon-eye ui-btn-icon-left">Spend a credit</a>
 		<a href="#showBalance" class="ui-btn ui-btn-b ui-shadow" data-transition="pop" data-rel="popup" >Credit balance</a>
@@ -93,6 +100,8 @@
 	</div>
 	<div style="display:none;" class="floating_window" id='show_card_frnt'>
 		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
+		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
+		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
 	</div>
 	<div style="display:none;" class="floating_window" id='show_card_back'>
 		<div class="popupCloseButton" onclick="close_floating_window('show_card_back')" >&times;</div>
@@ -131,10 +140,10 @@
 			<input type="text" name="redg_no" id="redg_no" placeholder="matricula" autocomplete="off"/>
 			<label>Browse image of card (user details):</label>
 			<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" autocomplete="off"/>
-			<p id="card_frnt_status" style='color:red'>error</p>
+			<p id="card_frnt_status" style='color:red'>&#10060;</p>
 			<label>Browse image of card (with barcode):</label>
 			<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" autocomplete="off"/>
-			<p id="card_back_status" style='color:red'>error</p>
+			<p id="card_back_status" style='color:red'>&#10060;</p>
 			<a href="#" id="save_user_data" class="ui-btn ui-btn-b ui-shadow ui-icon-check ui-btn-icon-left">Save data</a>
 			</form>
 		</div>
@@ -163,9 +172,14 @@
 			<div data-role="collapsible" data-collapsed="true">
 			<h4>Help</h4>
 			<ul data-role="listview">
-				<li>Coming soon...</li>
-				<li>...</li>
-				<li>...</li>
+			   <li>Save a local copy of this website. It dont require internet connection. </li>
+				<li>Step 1: Open camera and take pictures of your Resturant card (both sides).</li>
+				<li>Step1 2: Open the app and go to settings. Fill name and other details. Browse the  Card images. Do not use high resolution images. You can use screenshot of the image. It will be better for your browser. Click on Save to save. </li>
+				<li>When you want to byu credits. Go to Home page and tap on 'Recharge credit'</li>
+					<li>On the Entrance to resturant use the second button to show your barcode.</li>
+					 	<li>Click on the third button to 'Check credit balance'</li>
+					 	<li>If something goes wrong and you want to edit your credits. Go to Settings>> click on 'Edit credits' button</li>
+					 	
 			</ul>
 		</div>
 	</div>	
@@ -177,27 +191,33 @@
 </html>
 
 <script>
-function formatAMPM(date) { // This is to display 12 hour format like you asked
- var year = date.getFullYear(),
-        month = date.getMonth() + 1, // months are zero indexed
-        day = date.getDate(),
-        hour = date.getHours(),
-        minute = date.getMinutes(),
-        second = date.getSeconds(),
-        hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
-        minuteFormatted = minute < 10 ? "0" + minute : minute,
-        morning = hour < 12 ? "am" : "pm";
 
-    return month + "/" + day + "/" + year + " " + hourFormatted + ":" +
-            minuteFormatted + morning;  
+// Formatted date and time
+function formatAMPM(date) { 
+ var year = date.getFullYear(),
+ month = date.getMonth() + 1, // months are zero indexed
+ day = date.getDate(),
+ hour = date.getHours(),
+ minute = date.getMinutes(),
+ second = date.getSeconds();
+ //hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+ //minuteFormatted = minute < 10 ? "0" + minute : minute,
+ //morning = hour < 12 ? "am" : "pm";
+ return month + "/" + day + "/" + year + " " + hour + ":" +minute;  
 }
 
-$(document).ready(function(){ //used credit
+function show_card(){
+  var side = 'RU.card_back';
+  //$('#card_preview').css('background','url('+localStorage.getItem(side)+')');
+  //$('#card_preview').css('background-size','100% 100%');
+  $('#card_preview').html('0000000000000');
+}
+
+$(document).ready(function(){ 
 	if(!('RU.card_front' in localStorage || 'RU.card_back' in localStorage)) {
 		alert('User details missing!! Go to Settings >> browse card details >> save.');
-	}
-	if(!('RU.spent_credit' in localStorage)){
-		localStorage.setItem('RU.spent_credit',0);
+		var msg = 'User details missing!! Go to Settings tab'
+		$('#user_alert').html(msg);
 	}
 	if(!('RU.credit' in localStorage)){ //unused credit
 		localStorage.setItem('RU.credit',0);
@@ -216,12 +236,12 @@ $(document).ready(function(){ //used credit
 	}
 	if(localStorage.getItem('RU.card_front') !== null ){
 		$("#card_front").val(localStorage.getItem('RU.card_front'));
-		$('#card_frnt_status').html('OK');
+		$('#card_frnt_status').html('&#9989;');
 		$('#card_frnt_status').css('color','green');
 	}
 	if(localStorage.getItem('RU.card_back') !== null ){
 		$("#card_back").val(localStorage.getItem('RU.card_back'));
-		$('#card_back_status').html('OK');
+		$('#card_back_status').html('&#9989;');
 		$('#card_back_status').css('color','green');
 	}
 	if(localStorage.getItem('RU.lang') !== null ){
@@ -230,24 +250,35 @@ $(document).ready(function(){ //used credit
 	//Assign credit balance to <p>
 	$('#net_balance').html(localStorage.getItem('RU.credit'));
 	
-	//History update
-	function update_history(info){
-		var dt = formatAMPM(new Date());
-		var h = JSON.parse(localStorage.getItem('RU.history'));
-		if(info.length >2){
-			h[Object.keys(h).length] = '<a href="#"><span style="font-width:bold;">'+dt+'</span>:  '+info+'</a>';		
-			localStorage.setItem('RU.history',JSON.stringify(h));
-		}		
-		$('#balance_history').empty();
-		for(var i=0;i<Object.keys(h).length; i++){
-			$('#balance_history').append('<li>'+h[i]+'</li>');
-		}
-	}
-	
 	$("#language").change(function(){
 		localStorage.setItem('RU.lang', $("#language").val());
 		//location.reload();
 	});
+	
+	//History update
+	function update_history(info){
+		var dt = formatAMPM(new Date());
+		var h = JSON.parse(localStorage.getItem('RU.history'));
+		if(info.length>2){
+		  var k = 0;
+		  if (h === null){
+		    h = {};  
+		  }
+		  k = Object.keys(h).length;
+			h[k] = '<span style="font-weight:bold; margin-right: 10px;">'+dt+'</span>:  '+info;
+			localStorage.setItem('RU.history',JSON.stringify(h));
+		}
+		if(h !== null){
+		  $('#balance_history').empty();
+		  for(var i=Object.keys(h).length-1;i<0; i--){
+		    if((Object.keys(h).length-20) == i){
+		      break;
+		    }
+			  $('#balance_history').append('<li class="ui-li-static">'+h[i]+'</li>');
+		  }
+		}
+	}
+	//Upload card details 
 	$("#card_user_details").change(function(){		
 		//const preview = $('#prv')[0];		
 		const file = $("#card_user_details")[0].files[0];
@@ -261,9 +292,11 @@ $(document).ready(function(){ //used credit
 		reader.readAsDataURL(file);
 		}	
 		//<p id="card_frnt_status">NOT FOUND</p>
-		$('#card_frnt_status').html('OK');
+		$('#card_frnt_status').html('&#9989;');
 		$('#card_frnt_status').css('color','green');
 	});
+	
+	// Upload card_barcode
 	$("#card_barcode").change(function(){		
 		//const preview = $('#prv')[0];
 		const file = $("#card_barcode")[0].files[0];
@@ -276,7 +309,7 @@ $(document).ready(function(){ //used credit
 		if (file) {
 		reader.readAsDataURL(file);
 		}	
-		$('#card_back_status').html('OK');
+		$('#card_back_status').html('&#9989;');
 		$('#card_back_status').css('color','green');
 	});
 	
@@ -285,7 +318,8 @@ $(document).ready(function(){ //used credit
 		localStorage.setItem('RU.redg_no', $("#redg_no").val());
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
-		alert('Saved');
+		alert('User profile Saved');
+		location.reload();
 	}); 
 	$("#buy_cr_shw_frnt").click(function(){
 		if (confirm('Are you sure you want to buy credits?')) {
@@ -305,8 +339,8 @@ $(document).ready(function(){ //used credit
 		$('#show_card_frnt').css('width','100%');
 		$('#show_card_frnt').css('height','100%');
 		$('#show_card_frnt').css('border','solid 1px red');
-		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'")');
-		$('#show_card_frnt').css('background-size','100% 100%');
+		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'") no-repeat center');
+		$('#show_card_frnt').css('background-size','50% auto');
 		//alert($('#show_card_frnt').html());
 	});
 	
@@ -314,8 +348,6 @@ $(document).ready(function(){ //used credit
 	$("#buy_cr_shw_bck").click(function(){
 		if (confirm('Are you sure you want to spend 1 credit?')) {
 			// Save it!
-			var k = parseInt(localStorage.getItem('RU.spent_credit'));
-			localStorage.setItem('RU.spent_credit',k+1);
 			localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
 			//Assign credit balance to <p>
 			$('#net_balance').html(localStorage.getItem('RU.credit'));
@@ -329,8 +361,8 @@ $(document).ready(function(){ //used credit
 		$('#show_card_back').css('width','100%');
 		$('#show_card_back').css('height','100%');
 		$('#show_card_back').css('border','solid 1px red');
-		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'")');
-		$('#show_card_back').css('background-size','100% 100%');
+		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'") no-repeat center');
+		$('#show_card_back').css('background-size','50% auto');
 		//alert($('#show_card_frnt').html());
 	});
 	$('#save_manual_edit_credit').click(function(){		
@@ -341,18 +373,24 @@ $(document).ready(function(){ //used credit
 	});
 	$('#clear_history').click(function(){
 	 localStorage.setItem('RU.history', null);
-	 update_history('cleared history')
+	 update_history('cleared history');
+	 alert('Clear!!');
 	});
+	
 	$('#reset').click(function(){
-	 localStorage.removeItem('RU.history');
-	 localStorage.removeItem('RU.username');
-	 localStorage.removeItem('RU.redg_no');
-	 localStorage.removeItem('RU.credit');
-	 localStorage.removeItem('RU.card_back' );
-	 localStorage.removeItem('RU.card_front' );
-	 localStorage.removeItem('RU.spent_credit' );
-	 localStorage.removeItem('RU.lang');
+	  if(confirm('Are you sure to reset ?') ){
+	    localStorage.removeItem('RU.history');
+	    localStorage.removeItem('RU.username');
+	    localStorage.removeItem('RU.redg_no');
+	    localStorage.removeItem('RU.credit');
+	    localStorage.removeItem('RU.card_back' );
+	    localStorage.removeItem('RU.card_front' );
+	    localStorage.removeItem('RU.lang');
+	    alert('Reset successful!!');
+	    location.reload();
+	  }
 	});
+	
 });
 function close_floating_window(e){
  $('#'+e).hide();
