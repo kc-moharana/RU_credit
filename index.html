@@ -13,6 +13,32 @@
   <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.mobile-1.4.5.min.js"></script>
+  
+  <style>
+   .floating_window{
+	top:0; left:0; right:0;z-index:100;overflow: auto;
+   }
+   .popupCloseButton {
+    background-color: #fff;
+    border: 3px solid #999;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-block;
+    font-family: arial;
+    font-weight: bold;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 25px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+	}
+	.popupCloseButton:hover {
+		background-color: #ccc;
+	}
+  </style>
  </head>
 
  <body>
@@ -34,38 +60,46 @@
 		
 		<div data-role="collapsible" data-collapsed="true">
 			<h4>History</h4>
-			<ul data-role="listview">
-				<li>List item 1</li>
-				<li>List item 2</li>
-				<li>List item 3</li>
+			<ul data-role="listview" id='balance_history'>				
 			</ul>
 		</div>
 	</div>
 		
 	<div data-role="popup" id="rechargePop" class="ui-corner-all" data-theme="a" >
-		<form>
-			<div style="padding: 15px 25px;">
-			 <h3>Buy Credit</h3>
-			 <input type="text" name="buy_credit_count" value="" placeholder="how many tickets" data-theme="a" />
-			 <a href="#popupBarcode" data-rel="popup" data-position-to="popup" data-transition="fade" class="ui-btn ui-btn-a ui-shadow ui-icon-eye ui-btn-icon-left">View user profile</a>		 
-			</div>
-		</form>
-	</div>
-	
-	<div data-role="popup" id="popupBarcode" class="photopopup" data-overlay-theme="a" data-corners="false" data-tolerance="30,15">
-		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><img src="img/photo-landscape.jpg" alt="Photo landscape">
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+		<div style="padding: 15px 25px;">
+			<h3>Buy Credit</h3>
+			<form>			 
+			 <input type="text" name="buy_credit_count" id="buy_credit_count" value="" placeholder="how many tickets" data-theme="a" autocomplete="off" />			 
+			</form>
+			<button data-role="none" id="buy_cr_shw_frnt">Card front side</button>			
+		</div>		
 	</div>	
 	
+	<div data-role="popup" id="popupBarcode" class="ui-corner-all" data-theme="a" >
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+		<div style="padding: 15px 25px;">
+			<h3>Spend Credit</h3>			
+			<button data-role="none" id="buy_cr_shw_bck" >Card back side</button>
+		</div>		
+	</div>		
+	
 	<div data-role="popup" id="showBalance" class="ui-corner-all" data-theme="b" >
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 		<div style="padding: 15px 25px;">
 		 <h3>Credit Balance</h3>		 
 		 <p id="net_balance" style="text-align:center;font-size:250%; ">5</p>
-		</div>
-		
+		</div>		
+	</div>
+	<div style="display:none;" class="floating_window" id='show_card_frnt'>
+		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
+	</div>
+	<div style="display:none;" class="floating_window" id='show_card_back'>
+		<div class="popupCloseButton" onclick="close_floating_window('show_card_back')" >&times;</div>
 	</div>
 	
 	<footer data-role="footer">
-	<h1>Last update: 12/1/2020</h1>
+	<h1>Last update: 17/1/2020</h1>
 	</footer>	
   </div>
   
@@ -81,62 +115,246 @@
     </div>
 	<div role="main" class="ui-content">
 	<h2>Settings</h2>
+			<div style="float:right;">
+				<form>
+				<label for="language" >Language</label>
+				<select name="language" id="language" data-role="flipswitch" data-mini="true" >
+					<option value="pt">PT</option>
+					<option value="en">EN</option>				
+				</select>
+				</form>
+			</div>
 		  <div class="ui-body ui-body-a ui-corner-all">
 		  <h3>User details</h3>
 			<form>
-			<input type="text" name="name" id="name" placeholder="User full name" />
-			<input type="text" name="redg_no" id="redg_no" placeholder="matricula" />
-			<label>Browse image of card (user details)</label>
-			<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" />
-			<label>Browse image of card (with barcode)</label>
-			<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" />
+			<input type="text" name="name" id="name" placeholder="User full name" autocomplete="off"/>
+			<input type="text" name="redg_no" id="redg_no" placeholder="matricula" autocomplete="off"/>
+			<label>Browse image of card (user details):</label>
+			<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" autocomplete="off"/>
+			<p id="card_frnt_status" style='color:red'>error</p>
+			<label>Browse image of card (with barcode):</label>
+			<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" autocomplete="off"/>
+			<p id="card_back_status" style='color:red'>error</p>
 			<a href="#" id="save_user_data" class="ui-btn ui-btn-b ui-shadow ui-icon-check ui-btn-icon-left">Save data</a>
 			</form>
 		</div>
 		<div class="ui-body ui-body-a ui-corner-all">
 		  <h3>Manage data</h3>
-			<button data-role="none">Edit credits</button><br>
-			<button data-role="none">Clear history</button><br>
-			<button data-role="none" style="background-color:red; border:grooved 0.01em red;">Reset all</button><br>
+			<a href="#manual_edit_credit_form" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-left" data-rel="popup">Edit credit balance</a>			
+			<button data-role="none" style="margin-left: 10px; margin-right: 10px;" id='clear_history'>Clear history</button>
+			<button data-role="none" id='reset'>Reset all</button>
 		</div>	
+		
+		<div data-role="popup" id="manual_edit_credit_form" class="ui-corner-all" data-theme="a" >
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+		<div style="padding: 15px 25px;">
+			<h3>Edit Credits</h3>	
+			<form>
+			 <input type="text" id="manual_balance" value='' />
+			 <script>
+			  document.getElementById('manual_balance').value=localStorage.getItem('RU.credit');
+			 </script>
+			</form>
+			<button data-role="none" id="save_manual_edit_credit" >Save</button>
+		</div>		
+	</div>
+		
+		
 			<div data-role="collapsible" data-collapsed="true">
 			<h4>Help</h4>
 			<ul data-role="listview">
-				<li>List item 1</li>
-				<li>List item 2</li>
-				<li>List item 3</li>
+				<li>Coming soon...</li>
+				<li>...</li>
+				<li>...</li>
 			</ul>
 		</div>
-	</div>
+	</div>	
 	<footer data-role="footer">
-	<h1>Last update: 12/1/2020</h1>
+	<h1>Last update: 17/1/2020</h1>
 	</footer>	
   </div>  
  </body>
 </html>
 
 <script>
-$(document).ready(function(){ 
- if(localStorage.getItem('RU.username') !== null ){
-	$("#name").val(localStorage.getItem('RU.username'));
- } 
- if(localStorage.getItem('RU.redg_no') !== null ){
-	$("#redg_no").val(localStorage.getItem('RU.redg_no'));
- }
+function formatAMPM(date) { // This is to display 12 hour format like you asked
+ var year = date.getFullYear(),
+        month = date.getMonth() + 1, // months are zero indexed
+        day = date.getDate(),
+        hour = date.getHours(),
+        minute = date.getMinutes(),
+        second = date.getSeconds(),
+        hourFormatted = hour % 12 || 12, // hour returned in 24 hour format
+        minuteFormatted = minute < 10 ? "0" + minute : minute,
+        morning = hour < 12 ? "am" : "pm";
 
- 
- $("#save_user_data").click(function(){
-	localStorage.setItem('RU.username', $("#name").val() );
-	localStorage.setItem('RU.redg_no', $("#redg_no").val());
-	localStorage.setItem('RU.card_front', $("#card_user_details").val());
-	localStorage.setItem('RU.card_back', $("#card_barcode").val());
-	alert('Saved');
-  }); 
+    return month + "/" + day + "/" + year + " " + hourFormatted + ":" +
+            minuteFormatted + morning;  
+}
+
+$(document).ready(function(){ //used credit
+	if(!('RU.card_front' in localStorage || 'RU.card_back' in localStorage)) {
+		alert('User details missing!! Go to Settings >> browse card details >> save.');
+	}
+	if(!('RU.spent_credit' in localStorage)){
+		localStorage.setItem('RU.spent_credit',0);
+	}
+	if(!('RU.credit' in localStorage)){ //unused credit
+		localStorage.setItem('RU.credit',0);
+	}
+	if('RU.username' in localStorage){
+		$("#name").val(localStorage.getItem('RU.username'));
+	}
+	if(!('RU.history' in localStorage)){
+		localStorage.setItem('RU.history','{}');
+	}
+	if(localStorage.getItem('RU.redg_no') !== null ){
+		$("#redg_no").val(localStorage.getItem('RU.redg_no'));
+	}
+	if(localStorage.getItem('RU.history') !== null ){
+		update_history('');	
+	}
+	if(localStorage.getItem('RU.card_front') !== null ){
+		$("#card_front").val(localStorage.getItem('RU.card_front'));
+		$('#card_frnt_status').html('OK');
+		$('#card_frnt_status').css('color','green');
+	}
+	if(localStorage.getItem('RU.card_back') !== null ){
+		$("#card_back").val(localStorage.getItem('RU.card_back'));
+		$('#card_back_status').html('OK');
+		$('#card_back_status').css('color','green');
+	}
+	if(localStorage.getItem('RU.lang') !== null ){
+		$("#lang").val(localStorage.getItem('RU.lang'));
+	}
+	//Assign credit balance to <p>
+	$('#net_balance').html(localStorage.getItem('RU.credit'));
+	
+	//History update
+	function update_history(info){
+		var dt = formatAMPM(new Date());
+		var h = JSON.parse(localStorage.getItem('RU.history'));
+		if(info.length >2){
+			h[Object.keys(h).length] = '<a href="#"><span style="font-width:bold;">'+dt+'</span>:  '+info+'</a>';		
+			localStorage.setItem('RU.history',JSON.stringify(h));
+		}		
+		$('#balance_history').empty();
+		for(var i=0;i<Object.keys(h).length; i++){
+			$('#balance_history').append('<li>'+h[i]+'</li>');
+		}
+	}
+	
+	$("#language").change(function(){
+		localStorage.setItem('RU.lang', $("#language").val());
+		//location.reload();
+	});
+	$("#card_user_details").change(function(){		
+		//const preview = $('#prv')[0];		
+		const file = $("#card_user_details")[0].files[0];
+		const reader = new FileReader();		
+		reader.addEventListener("load", function () {
+			// convert image file to base64 string
+			//preview.src = reader.result;
+			localStorage.setItem('RU.card_front', reader.result);
+		  }, false);		
+		if (file) {
+		reader.readAsDataURL(file);
+		}	
+		//<p id="card_frnt_status">NOT FOUND</p>
+		$('#card_frnt_status').html('OK');
+		$('#card_frnt_status').css('color','green');
+	});
+	$("#card_barcode").change(function(){		
+		//const preview = $('#prv')[0];
+		const file = $("#card_barcode")[0].files[0];
+		const reader = new FileReader();		
+		reader.addEventListener("load", function () {
+			// convert image file to base64 string
+			//preview.src = reader.result;
+			localStorage.setItem('RU.card_back', reader.result);
+		  }, false);		
+		if (file) {
+		reader.readAsDataURL(file);
+		}	
+		$('#card_back_status').html('OK');
+		$('#card_back_status').css('color','green');
+	});
+	
+	$("#save_user_data").click(function(){
+		localStorage.setItem('RU.username', $("#name").val() );
+		localStorage.setItem('RU.redg_no', $("#redg_no").val());
+		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
+		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
+		alert('Saved');
+	}); 
+	$("#buy_cr_shw_frnt").click(function(){
+		if (confirm('Are you sure you want to buy credits?')) {
+			// Save it!
+			var k = parseInt(localStorage.getItem('RU.credit'));
+			var l = parseInt($('#buy_credit_count').val());
+			localStorage.setItem('RU.credit',k+l);
+			//Assign credit balance to <p>
+			$('#net_balance').html(localStorage.getItem('RU.credit'));
+			update_history('recharged '+l+' credits.');
+		} else {
+			return;
+		}
+		$('#show_card_frnt').css('position','absolute');		
+		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
+		$('#show_card_frnt').css('display','inline-block');
+		$('#show_card_frnt').css('width','100%');
+		$('#show_card_frnt').css('height','100%');
+		$('#show_card_frnt').css('border','solid 1px red');
+		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'")');
+		$('#show_card_frnt').css('background-size','100% 100%');
+		//alert($('#show_card_frnt').html());
+	});
+	
+	
+	$("#buy_cr_shw_bck").click(function(){
+		if (confirm('Are you sure you want to spend 1 credit?')) {
+			// Save it!
+			var k = parseInt(localStorage.getItem('RU.spent_credit'));
+			localStorage.setItem('RU.spent_credit',k+1);
+			localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
+			//Assign credit balance to <p>
+			$('#net_balance').html(localStorage.getItem('RU.credit'));
+			update_history('spent 1 credit.')
+		} else {
+			return;
+		}
+		$('#show_card_back').css('position','absolute');		
+		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
+		$('#show_card_back').css('display','inline-block');
+		$('#show_card_back').css('width','100%');
+		$('#show_card_back').css('height','100%');
+		$('#show_card_back').css('border','solid 1px red');
+		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'")');
+		$('#show_card_back').css('background-size','100% 100%');
+		//alert($('#show_card_frnt').html());
+	});
+	$('#save_manual_edit_credit').click(function(){		
+		localStorage.setItem('RU.credit', parseInt($('#manual_balance').val())) ;
+		$('#net_balance').html(localStorage.getItem('RU.credit'));
+		update_history('updated credit balance to '+parseInt($('#manual_balance').val())+' credits.')
+		alert('saved');
+	});
+	$('#clear_history').click(function(){
+	 localStorage.setItem('RU.history', null);
+	 update_history('cleared history')
+	});
+	$('#reset').click(function(){
+	 localStorage.removeItem('RU.history');
+	 localStorage.removeItem('RU.username');
+	 localStorage.removeItem('RU.redg_no');
+	 localStorage.removeItem('RU.credit');
+	 localStorage.removeItem('RU.card_back' );
+	 localStorage.removeItem('RU.card_front' );
+	 localStorage.removeItem('RU.spent_credit' );
+	 localStorage.removeItem('RU.lang');
+	});
 });
-
+function close_floating_window(e){
+ $('#'+e).hide();
+}
 </script>
-
-
-<h3>Heading</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse accumsan blandit fermentum. Pellentesque cursus mauris purus, auctor commodo mi ullamcorper nec. Donec semper mattis eros, nec condimentum ante sollicitudin quis. Etiam orci sem, porttitor ut tellus nec, blandit posuere urna. Proin a arcu non lacus pretium faucibus. Aliquam sed est porttitor, ullamcorper urna nec, vehicula lorem. Cras porttitor est lorem, non venenatis diam convallis congue.</p>
-  </div>
