@@ -4,7 +4,7 @@
     "name": "RU credit",
     "scope": "/",
     "display": "fullscreen",
-    "start_url": "https://kc-moharana.github.io/RU_credit/",
+    "start_url": "https://kc-moharana.github.io/ru-credit/",
     "short_name": "RU credit",
     "theme_color": "transparent",
     "description": "Um webapp simples para rastrear saldo de crédito.",
@@ -13,9 +13,13 @@
     "related_applications": [],
     "prefer_related_applications": false,
     "icons": [{
+     "src": "./img/icon.png",
+     "sizes": "51x51"
+      },
+	  {
      "src": "./img/icon.svg",
-     "sizes": "48x48",
-     "type": "image/svg"	 
+     "sizes": "48x48 51x51 72x72",     
+	 "purpose":"badge"
       }
 
      ]

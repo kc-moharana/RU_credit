@@ -74,8 +74,8 @@
 		<a href="#showBalance" class="ui-btn ui-btn-b ui-shadow" data-transition="pop" data-rel="popup" id='BlncCrBtn' >Balanco de credito</a>
 		
 		<div data-role="collapsible" data-collapsed="true">
-			<h4 id='CrHisH1'>História</h4>
-			<ul data-role="listview" id='balance_history'>				
+			<h4 id="CrHisH">História</h4>
+			<ul data-role="listview" id='balance_history'>
 			</ul>
 		</div>
 	</div>
@@ -83,7 +83,7 @@
 		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 		<div style="padding: 15px 25px;">
 		 <h3 id='CrBlncH1'>Credit Balance</h3>		 
-		 <p id="net_balance" style="text-align:center;font-size:250%; ">xxx</p>
+		 <p id="net_balance" style="text-align:center; font-size:250%; ">xxx</p>
 		</div>		
 	</div>
 	<div style="display:none;" class="floating_window" id='show_card_frnt'>
@@ -127,14 +127,20 @@
 		  <div class="ui-body ui-body-a ui-corner-all">
 		  <h3 id='userProfH3'>Detalhes do usuario</h3>
 			<form>
-			<input type="text" name="name" id="name" placeholder="User full name" autocomplete="off"/>
-			<input type="text" name="redg_no" id="redg_no" placeholder="matricula" autocomplete="off"/>
-			<label id='BrwCrd_lab1'>Parte frontal do cartão (foto):</label>
-			<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" autocomplete="off"/>
-			<p id="card_frnt_status" style='color:red'>&#10060;</p>
-			<label id='BrwCrd_lab2'>Parte traseira do cartão(com barcode):</label>
-			<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" autocomplete="off"/>
-			<p id="card_back_status" style='color:red'>&#10060;</p>
+			<input type="text" name="name" id="name" placeholder="Name/Nome" autocomplete="off"/>
+			  <div class="ui-body ui-body-a ui-corner-all">
+				<h3 id='ImgUpload_H'>Upload image</h3>
+					<p id='ImgUpload_lab'>
+						Tire uma foto do seu cartão de restaurante usando a câmera do telefone. Verifique se tudo é visível claramente e as imagens estão na orientação paisagem.						
+					</p>
+			
+				<label id='BrwCrd_lab1'>Frente do cartão:</label>
+				<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" autocomplete="off"/>
+				<p id="card_frnt_status" style='color:red;'>&#10060;</p>
+				<label id='BrwCrd_lab2' style="">Parte traseira do cartão(com barcode):</label>
+				<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" autocomplete="off"/>
+				<p id="card_back_status" style='color:red'>&#10060;</p>
+				</div>
 			<a href="#" id="save_user_data" class="ui-btn ui-btn-b ui-shadow ui-icon-check ui-btn-icon-left">Salve</a>
 			</form>
 		</div>
@@ -157,19 +163,11 @@
 			</form>
 			<button data-role="none" id="save_manual_edit_credit">Save</button>
 		</div>		
-	</div>	
-			<div data-role="collapsible" data-collapsed="true">
-			<h4>Socorro</h4>
-			<ul data-role="listview">
-			   <li>Save a local copy of this website. It dont require internet connection.https://kc-moharana.github.io/RU_credit/ </li>
-				<li>Step 1: Open camera and take pictures of your Resturant card (both sides).</li>
-				<li>Step1 2: Open the app and go to settings. Fill name and other details. Browse the  Card images. Do not use high resolution images. You can use screenshot of the image. It will be better for your browser. Click on Save to save. </li>
-				<li>When you want to byu credits. Go to Home page and tap on 'Recharge credit'</li>
-					<li>On the Entrance to resturant use the second button to show your barcode.</li>
-					 	<li>Click on the third button to 'Check credit balance'</li>
-					 	<li>If something goes wrong and you want to edit your credits. Go to Settings>> click on 'Edit credits' button</li>
-					 	
-			</ul>
+	 </div>	
+		<h3 class="ui-bar ui-bar-a ui-corner-all" id="help_H">Socorro</h3>
+		<div class="ui-body ui-body-a ui-corner-all" id="help">
+			<ol id="help_ol">
+			</ol>
 		</div>
 	</div>	
 	<footer data-role="footer">
@@ -179,6 +177,17 @@
  </body>
 </html>
 <script>
+
+function load_help(){
+	var lang = localStorage.getItem('RU.lang');
+	if('en'){
+	$('#help_ol').html('<li>Comming soon.</li>');
+	}
+	else{
+	$('#help_ol').html('<li>Comming soon ç.</li>');
+	}
+
+}
 
 // Formatted date and time
 function formatAMPM(date) { 
@@ -202,6 +211,7 @@ function show_card(){
 }
 
 $(document).ready(function(){ 
+	load_help();
 	if(!('RU.card_front' in localStorage || 'RU.card_back' in localStorage)) {
 		//alert('User details missing!! Go to Settings >> browse card details >> save.');
 		var msg = localStorage.getItem('RU.lang')=='en'?'User details missing!! Go to Settings tab':'Detalhes do usuário ausentes !! Vá para a guia Configurações';
@@ -215,17 +225,19 @@ $(document).ready(function(){
 		$("#name").val(localStorage.getItem('RU.username'));
 	}
 	if(!('RU.history' in localStorage)){
-		localStorage.setItem('RU.history','{}');
+		localStorage.setItem('RU.history',null);
 	}
 	if(!('RU.lang' in localStorage)){
 		localStorage.setItem('RU.lang','pt');
 	}	
 	//UI language 
-	$('#settingsBtn').html(localStorage.getItem('RU.lang')=='en'?'Settings':'Configurações' );
+	$('.settingsBtn').html(localStorage.getItem('RU.lang')=='en'?'Settings':'Configurações' );
 	$('#langLab').html(localStorage.getItem('RU.lang')=='en'?'Language':'Língua' );
 	$('#userProfH3').html(localStorage.getItem('RU.lang')=='en'?'User Details':'Perfil de usuário' );
-	$('#BrwCrd_lab1').html(localStorage.getItem('RU.lang')=='en'?'Image of Front side of your card':'Imagem da frente do seu cartão' );
-	$('#BrwCrd_lab2').html(localStorage.getItem('RU.lang')=='en'?'Image of back side of your card (barcode)':'Imagem do verso do seu cartão (código de barras)' );
+	$('#ImgUpload_H').html(localStorage.getItem('RU.lang')=='en'?'Card details':'Detalhes do cartão');
+	$('#ImgUpload_lab').html(localStorage.getItem('RU.lang')=='en'?'Upload clear images of your restaurant card. Make sure the images are in <b>landscape</b> orientation.':'Tire uma foto do seu cartão de restaurante usando a câmera do telefone. Verifique se tudo é visível claramente e as imagens estão na <b>orientação paisagem</b>.' );					
+	$('#BrwCrd_lab1').html(localStorage.getItem('RU.lang')=='en'?'Front side of your card':'Frente do seu cartão' );
+	$('#BrwCrd_lab2').html(localStorage.getItem('RU.lang')=='en'?'Backside of your card (barcode)':'Parte traseira do seu cartão(código de barras)' );
 	$('#save_user_data').html(localStorage.getItem('RU.lang')=='en'?'Save data':'Salve' );
 	//$('#card_barcode').html(localStorage.getItem('RU.lang')=='en'?'Language':'Língua' );
 	$('#MngData_H3').html(localStorage.getItem('RU.lang')=='en'?'Manage Data':'Gerenciar dados' );
@@ -235,7 +247,9 @@ $(document).ready(function(){
 	$('#buy_cr_shw_frnt').html(localStorage.getItem('RU.lang')=='en'?'Recharge Credit':'Recarregar Crédito' );
 	$('#buy_cr_shw_bck').html(localStorage.getItem('RU.lang')=='en'?'Spend 1 credit':'Gaste 1 crédito' );
 	$('#BlncCrBtn').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
-	$('#CrHisH1').html(localStorage.getItem('RU.lang')=='en'?'History':'História' );
+	//<h4 id="CrHisH" class=>
+	$('#CrHisH').html(localStorage.getItem('RU.lang')=='en'?'<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-inherit ui-icon-plus">History<span class="ui-collapsible-heading-status"> click to collapse contents</span></a>':'<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-btn-icon-left ui-btn-inherit ui-icon-plus">História<span class="ui-collapsible-heading-status"> click to collapse contents</span></a>');
+	//$('#CrHisH').addClass("ui-collapsible-heading");
 	$('#CrBlncH1').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
 	
 	if(localStorage.getItem('RU.redg_no') !== null ){
@@ -248,14 +262,16 @@ $(document).ready(function(){
 		$("#card_front").val(localStorage.getItem('RU.card_front'));
 		$('#card_frnt_status').html('&#9989;');
 		$('#card_frnt_status').css('color','green');
+		$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.card_back') !== null ){
 		$("#card_back").val(localStorage.getItem('RU.card_back'));
 		$('#card_back_status').html('&#9989;');
 		$('#card_back_status').css('color','green');
+		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.lang') !== null ){
-		$("#lang").val(localStorage.getItem('RU.lang'));
+		$("#lang").val(localStorage.getItem('RU.lang')).change();
 	}
 	//Assign credit balance to <p>
 	$('#net_balance').html(localStorage.getItem('RU.credit'));
@@ -279,11 +295,14 @@ $(document).ready(function(){
 			localStorage.setItem('RU.history',JSON.stringify(h));
 		}
 		if(h !== null){
+					
 		  $('#balance_history').empty();
-		  for(var i=Object.keys(h).length-1;i<0; i--){
-		    if((Object.keys(h).length-20) == i){
-		      break;
-		    }
+		  
+		  for(var i=Object.keys(h).length-1;i>0; i--){
+			  // DOnt show more than 20 entries 
+			  if(Object.keys(h).length - 20 == i){
+			   break;
+			  }
 			  $('#balance_history').append('<li class="ui-li-static">'+h[i]+'</li>');
 		  }
 		}
@@ -325,23 +344,36 @@ $(document).ready(function(){
 	
 	$("#save_user_data").click(function(){
 		localStorage.setItem('RU.username', $("#name").val() );
-		localStorage.setItem('RU.redg_no', $("#redg_no").val());
+		//localStorage.setItem('RU.redg_no', $("#redg_no").val());
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
-		alert('User profile Saved');
-		location.reload();
+		if(!(localStorage.getItem('RU.username') && localStorage.getItem('RU.card_front') && localStorage.getItem(card_barcode) )){
+			$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
+			
+			$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
+			
+			alert('User profile Saved');
+			location.reload();
+		}else{
+			alert('Error..');
+		}		
 	}); 
 	$("#buy_cr_shw_frnt").click(function(){
-		var msg = localStorage.getItem('RU.credit')=='en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
+		if(!localStorage.getItem('RU.card_front')){
+			alert('Error!!.. ');
+		}
+		var msg = localStorage.getItem('RU.lang') == 'en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
 		var how_many = prompt(msg);
 		if (how_many) {
 			// Save it!
 			var k = parseInt(localStorage.getItem('RU.credit'));
+			k = k<0?0:k;
 			var l = parseInt(how_many);
 			localStorage.setItem('RU.credit',k+l);
 			//Assign credit balance to <p>
 			$('#net_balance').html(localStorage.getItem('RU.credit'));
 			update_history('recharged '+l+' credits.');
+			window.reload();
 		} else {
 			return;
 		}
@@ -358,7 +390,15 @@ $(document).ready(function(){
 	
 	
 	$("#buy_cr_shw_bck").click(function(){
-		var msg = localStorage.getItem('RU.credit')=='en'?'Are you sure you want to spend 1 credit?':'Tem certeza de que deseja gastar 1 crédito??';
+		if(!localStorage.getItem('RU.card_back')){
+			alert('Error!!.. ');
+			return false;
+		}
+		if(localStorage.getItem('RU.credit')<=0){
+			alert('Error: Credits 0!!!');
+			return false;
+		}
+		var msg = localStorage.getItem('RU.lang')=='en'?'Are you sure you want to spend 1 credit?':'Tem certeza de que deseja gastar 1 crédito??';
 		if (confirm(msg)) {
 			// Save it!
 			localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
