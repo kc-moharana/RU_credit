@@ -2,8 +2,8 @@
 <html>
  <head>
   <meta charset="UTF-8">
-  <meta name="description" content="RU credits">
-  <meta name="keywords" content="UENF, RU credits">
+  <meta name="description" content="RU credit">
+  <meta name="keywords" content="UENF, manage, RU credits">
   <meta name="author" content="Kanhu Charan Moharana">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="./manifest.json">
@@ -21,6 +21,7 @@
   <style>
    .floating_window{
 	top:0; left:0; right:0;z-index:100;overflow: auto;
+	background-color:white;
    }
    .popupCloseButton {
     background-color: #fff;
@@ -30,14 +31,14 @@
     display: inline-block;
     font-family: arial;
     font-weight: bold;
-    position: absolute;
-    top: 5px;
+    position: absolute;    
     right: 5px;
     font-size: 25px;
     line-height: 30px;
     width: 30px;
     height: 30px;
     text-align: center;
+	vertical-align: middle;
 	}
 	.popupCloseButton:hover {
 		background-color: #ccc;
@@ -52,8 +53,8 @@
 	</header>
 	<div data-role="navbar">
       <ul>
-        <li><a href="#home" data-transition='none' data-icon="home">Home</a></li>
-        <li><a href="#settings" data-transition='none' data-icon="gear">Settings</a></li>        
+        <li><a href="#home" data-transition='none' data-icon="home" class='homeBtn'>Home</a></li>
+        <li><a href="#settings" data-transition='none' data-icon="gear" class='settingsBtn'>Settings</a></li>        
       </ul>
     </div>
 	<div role="main" class="ui-content">
@@ -61,58 +62,45 @@
 		<p id="user_alert" style="color: red;"></p>
 		<script>
 		if(parseInt(localStorage.getItem('RU.credit'))<3){
-		  $('#user_alert').html('Attention: You have fewer credits !!!');
-		  
+		  var msg = 'Atenção: você tem menos créditos:('+localStorage.getItem('RU.lang')+').';
+		  if(localStorage.getItem('RU.lang') && localStorage.getItem('RU.lang') === 'EN' ){
+			msg = 'Attention: You have fewer credits: ('+localStorage.getItem('RU.lang')+').';
+		  }
+		  $('#user_alert').html(msg);		  
 		}
 	</script>
-		<a href="#rechargePop" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-icon-recycle ui-btn-icon-left" data-rel="popup">Recharge credit</a>
-		<a href="#popupBarcode" data-rel="popup" data-position-to="window" data-transition="fade" class="ui-btn ui-btn-a ui-shadow ui-icon-eye ui-btn-icon-left">Spend a credit</a>
-		<a href="#showBalance" class="ui-btn ui-btn-b ui-shadow" data-transition="pop" data-rel="popup" >Credit balance</a>
+		<a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-recycle ui-btn-icon-left" data-rel="popup" id='buy_cr_shw_frnt'>Recarregar crédito</a>
+		<a href="#" class="ui-btn ui-btn-a ui-shadow ui-icon-eye ui-btn-icon-left" id='buy_cr_shw_bck'>Gaste 1 crédito</a>
+		<a href="#showBalance" class="ui-btn ui-btn-b ui-shadow" data-transition="pop" data-rel="popup" id='BlncCrBtn' >Balanco de credito</a>
 		
 		<div data-role="collapsible" data-collapsed="true">
-			<h4>History</h4>
+			<h4 id='CrHisH1'>História</h4>
 			<ul data-role="listview" id='balance_history'>				
 			</ul>
 		</div>
 	</div>
-		
-	<div data-role="popup" id="rechargePop" class="ui-corner-all" data-theme="a" >
-		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-		<div style="padding: 15px 25px;">
-			<h3>Buy Credit</h3>
-			<form>			 
-			 <input type="text" name="buy_credit_count" id="buy_credit_count" value="" placeholder="how many tickets" data-theme="a" autocomplete="off" />			 
-			</form>
-			<button data-role="none" id="buy_cr_shw_frnt">Card front side</button>			
-		</div>		
-	</div>	
-	
-	<div data-role="popup" id="popupBarcode" class="ui-corner-all" data-theme="a" >
-		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-		<div style="padding: 15px 25px;">
-			<h3>Spend Credit</h3>			
-			<button data-role="none" id="buy_cr_shw_bck" >Card back side</button>
-		</div>		
-	</div>		
-	
 	<div data-role="popup" id="showBalance" class="ui-corner-all" data-theme="b" >
 		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
 		<div style="padding: 15px 25px;">
-		 <h3>Credit Balance</h3>		 
-		 <p id="net_balance" style="text-align:center;font-size:250%; ">5</p>
+		 <h3 id='CrBlncH1'>Credit Balance</h3>		 
+		 <p id="net_balance" style="text-align:center;font-size:250%; ">xxx</p>
 		</div>		
 	</div>
 	<div style="display:none;" class="floating_window" id='show_card_frnt'>
 		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
-		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
-		<div class="popupCloseButton" onclick="close_floating_window('show_card_frnt')" >&times;</div>
+		<div class="popupCloseButton" onclick="zoom_in_btn('show_card_frnt')" style="bottom: 5px; right: 75px; font-size: 25px;">+</div>
+		<span style="position: absolute;vertical-align: text-top; text-align:center; bottom: 5px; right: 110px; font-size: 12px;">zoom</span>
+		<div class="popupCloseButton" onclick="zoom_out_btn('show_card_frnt')" style="bottom: 5px; right: 140px; font-size: 25px;">&minus;</div>
 	</div>
 	<div style="display:none;" class="floating_window" id='show_card_back'>
-		<div class="popupCloseButton" onclick="close_floating_window('show_card_back')" >&times;</div>
+		<div class="popupCloseButton" onclick="close_floating_window('show_card_back')" style="top: 5px; " >&times;</div>
+		<div class="popupCloseButton" onclick="zoom_in_btn('show_card_back')" style="bottom: 5px; right: 75px; font-size: 25px;">+</div>
+		<span style="position: absolute;vertical-align: text-top; text-align:center; bottom: 5px; right: 110px; font-size: 12px;">zoom</span>
+		<div class="popupCloseButton" onclick="zoom_out_btn('show_card_back')" style="bottom: 5px; right: 140px; font-size: 25px; vertical-align: text-top;">&minus;</div>
 	</div>
 	
 	<footer data-role="footer">
-	<h1>Last update: 17/1/2020</h1>
+	<h1>Ultima atualização: 18/1/2020</h1>
 	</footer>	
   </div>
   
@@ -123,14 +111,13 @@
 	<div data-role="navbar">
       <ul>
         <li><a href="#home" data-transition='none' data-icon="home">Home</a></li>
-        <li><a href="#settings" data-transition='none' data-icon="gear">Settings</a></li>        
+        <li><a href="#settings" data-transition='none' data-icon="gear" class='settingsBtn'>Settings</a></li>        
       </ul>
     </div>
 	<div role="main" class="ui-content">
-	<h2>Settings</h2>
-			<div style="float:right;">
+		<div style="float:right;">
 				<form>
-				<label for="language" >Language</label>
+				<label for="language" id='langLab'>Language</label>
 				<select name="language" id="language" data-role="flipswitch" data-mini="true" >
 					<option value="pt">PT</option>
 					<option value="en">EN</option>				
@@ -138,43 +125,41 @@
 				</form>
 			</div>
 		  <div class="ui-body ui-body-a ui-corner-all">
-		  <h3>User details</h3>
+		  <h3 id='userProfH3'>Detalhes do usuario</h3>
 			<form>
 			<input type="text" name="name" id="name" placeholder="User full name" autocomplete="off"/>
 			<input type="text" name="redg_no" id="redg_no" placeholder="matricula" autocomplete="off"/>
-			<label>Browse image of card (user details):</label>
+			<label id='BrwCrd_lab1'>Parte frontal do cartão (foto):</label>
 			<input type="file" name="card_user_details" id="card_user_details" placeholder="Browse image of card (user details)" autocomplete="off"/>
 			<p id="card_frnt_status" style='color:red'>&#10060;</p>
-			<label>Browse image of card (with barcode):</label>
+			<label id='BrwCrd_lab2'>Parte traseira do cartão(com barcode):</label>
 			<input type="file" name="card_barcode" id="card_barcode" placeholder="Browse image of card (barcode)" autocomplete="off"/>
 			<p id="card_back_status" style='color:red'>&#10060;</p>
-			<a href="#" id="save_user_data" class="ui-btn ui-btn-b ui-shadow ui-icon-check ui-btn-icon-left">Save data</a>
+			<a href="#" id="save_user_data" class="ui-btn ui-btn-b ui-shadow ui-icon-check ui-btn-icon-left">Salve</a>
 			</form>
 		</div>
 		<div class="ui-body ui-body-a ui-corner-all">
-		  <h3>Manage data</h3>
-			<a href="#manual_edit_credit_form" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-left" data-rel="popup">Edit credit balance</a>			
-			<button data-role="none" style="margin-left: 10px; margin-right: 10px;" id='clear_history'>Clear history</button>
-			<button data-role="none" id='reset'>Reset all</button>
+		  <h3 id='MngData_H3'>Gerenciar dados</h3>
+			<a href="#manual_edit_credit_form" data-transition="pop" class="ui-btn ui-corner-all ui-shadow ui-icon-edit ui-btn-icon-left" data-rel="popup" id='edit_man_blnc'>Editar saldo de crédito</a>			
+			<button data-role="none" style="margin-left: 10px; margin-right: 10px;" id='clear_history'>Limpar histórico</button>
+			<button data-role="none" id='reset'>Reiniciar tudo</button>
 		</div>	
 		
 		<div data-role="popup" id="manual_edit_credit_form" class="ui-corner-all" data-theme="a" >
-		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+		<a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" id='Btn_manual_edit_credit_form'>Close</a>
 		<div style="padding: 15px 25px;">
-			<h3>Edit Credits</h3>	
+			<h3 id='H3_manual_edit_credit_form'>Editar saldo</h3>	
 			<form>
 			 <input type="text" id="manual_balance" value='' />
 			 <script>
 			  document.getElementById('manual_balance').value=localStorage.getItem('RU.credit');
 			 </script>
 			</form>
-			<button data-role="none" id="save_manual_edit_credit" >Save</button>
+			<button data-role="none" id="save_manual_edit_credit">Save</button>
 		</div>		
-	</div>
-		
-		
+	</div>	
 			<div data-role="collapsible" data-collapsed="true">
-			<h4>Help</h4>
+			<h4>Socorro</h4>
 			<ul data-role="listview">
 			   <li>Save a local copy of this website. It dont require internet connection.https://kc-moharana.github.io/RU_credit/ </li>
 				<li>Step 1: Open camera and take pictures of your Resturant card (both sides).</li>
@@ -188,12 +173,11 @@
 		</div>
 	</div>	
 	<footer data-role="footer">
-	<h1>Last update: 17/1/2020</h1>
+	<h1>Last update: 18/1/2020</h1>
 	</footer>	
   </div>  
  </body>
 </html>
-
 <script>
 
 // Formatted date and time
@@ -219,10 +203,11 @@ function show_card(){
 
 $(document).ready(function(){ 
 	if(!('RU.card_front' in localStorage || 'RU.card_back' in localStorage)) {
-		alert('User details missing!! Go to Settings >> browse card details >> save.');
-		var msg = 'User details missing!! Go to Settings tab'
+		//alert('User details missing!! Go to Settings >> browse card details >> save.');
+		var msg = localStorage.getItem('RU.lang')=='en'?'User details missing!! Go to Settings tab':'Detalhes do usuário ausentes !! Vá para a guia Configurações';
 		$('#user_alert').html(msg);
 	}
+	// Setting default values 
 	if(!('RU.credit' in localStorage)){ //unused credit
 		localStorage.setItem('RU.credit',0);
 	}
@@ -232,12 +217,33 @@ $(document).ready(function(){
 	if(!('RU.history' in localStorage)){
 		localStorage.setItem('RU.history','{}');
 	}
+	if(!('RU.lang' in localStorage)){
+		localStorage.setItem('RU.lang','pt');
+	}	
+	//UI language 
+	$('#settingsBtn').html(localStorage.getItem('RU.lang')=='en'?'Settings':'Configurações' );
+	$('#langLab').html(localStorage.getItem('RU.lang')=='en'?'Language':'Língua' );
+	$('#userProfH3').html(localStorage.getItem('RU.lang')=='en'?'User Details':'Perfil de usuário' );
+	$('#BrwCrd_lab1').html(localStorage.getItem('RU.lang')=='en'?'Image of Front side of your card':'Imagem da frente do seu cartão' );
+	$('#BrwCrd_lab2').html(localStorage.getItem('RU.lang')=='en'?'Image of back side of your card (barcode)':'Imagem do verso do seu cartão (código de barras)' );
+	$('#save_user_data').html(localStorage.getItem('RU.lang')=='en'?'Save data':'Salve' );
+	//$('#card_barcode').html(localStorage.getItem('RU.lang')=='en'?'Language':'Língua' );
+	$('#MngData_H3').html(localStorage.getItem('RU.lang')=='en'?'Manage Data':'Gerenciar dados' );
+	$('#edit_man_blnc').html(localStorage.getItem('RU.lang')=='en'?'Edit Credit balance':'Editar saldo de crédito' );
+	$('#clear_history').html(localStorage.getItem('RU.lang')=='en'?'Clear History':'Limpar histórico' );
+	$('#reset').html(localStorage.getItem('RU.lang')=='en'?'Reset all':'Reiniciar tudo' );	
+	$('#buy_cr_shw_frnt').html(localStorage.getItem('RU.lang')=='en'?'Recharge Credit':'Recarregar Crédito' );
+	$('#buy_cr_shw_bck').html(localStorage.getItem('RU.lang')=='en'?'Spend 1 credit':'Gaste 1 crédito' );
+	$('#BlncCrBtn').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
+	$('#CrHisH1').html(localStorage.getItem('RU.lang')=='en'?'History':'História' );
+	$('#CrBlncH1').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
+	
 	if(localStorage.getItem('RU.redg_no') !== null ){
 		$("#redg_no").val(localStorage.getItem('RU.redg_no'));
 	}
 	if(localStorage.getItem('RU.history') !== null ){
 		update_history('');	
-	}
+	}	
 	if(localStorage.getItem('RU.card_front') !== null ){
 		$("#card_front").val(localStorage.getItem('RU.card_front'));
 		$('#card_frnt_status').html('&#9989;');
@@ -256,7 +262,7 @@ $(document).ready(function(){
 	
 	$("#language").change(function(){
 		localStorage.setItem('RU.lang', $("#language").val());
-		//location.reload();
+		location.reload();
 	});
 	
 	//History update
@@ -326,10 +332,12 @@ $(document).ready(function(){
 		location.reload();
 	}); 
 	$("#buy_cr_shw_frnt").click(function(){
-		if (confirm('Are you sure you want to buy credits?')) {
+		var msg = localStorage.getItem('RU.credit')=='en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
+		var how_many = prompt(msg);
+		if (how_many) {
 			// Save it!
 			var k = parseInt(localStorage.getItem('RU.credit'));
-			var l = parseInt($('#buy_credit_count').val());
+			var l = parseInt(how_many);
 			localStorage.setItem('RU.credit',k+l);
 			//Assign credit balance to <p>
 			$('#net_balance').html(localStorage.getItem('RU.credit'));
@@ -343,14 +351,15 @@ $(document).ready(function(){
 		$('#show_card_frnt').css('width','100%');
 		$('#show_card_frnt').css('height','100%');
 		$('#show_card_frnt').css('border','solid 1px red');
-		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'") no-repeat center');
-		$('#show_card_frnt').css('background-size','50% auto');
+		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'") no-repeat center #ccc');
+		$('#show_card_frnt').css('background-size','60% auto');
 		//alert($('#show_card_frnt').html());
 	});
 	
 	
 	$("#buy_cr_shw_bck").click(function(){
-		if (confirm('Are you sure you want to spend 1 credit?')) {
+		var msg = localStorage.getItem('RU.credit')=='en'?'Are you sure you want to spend 1 credit?':'Tem certeza de que deseja gastar 1 crédito??';
+		if (confirm(msg)) {
 			// Save it!
 			localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
 			//Assign credit balance to <p>
@@ -365,24 +374,29 @@ $(document).ready(function(){
 		$('#show_card_back').css('width','100%');
 		$('#show_card_back').css('height','100%');
 		$('#show_card_back').css('border','solid 1px red');
-		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'") no-repeat center');
-		$('#show_card_back').css('background-size','50% auto');
+		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'") no-repeat center #ccc');
+		$('#show_card_back').css('background-size','60% auto');
 		//alert($('#show_card_frnt').html());
 	});
 	$('#save_manual_edit_credit').click(function(){		
 		localStorage.setItem('RU.credit', parseInt($('#manual_balance').val())) ;
 		$('#net_balance').html(localStorage.getItem('RU.credit'));
-		update_history('updated credit balance to '+parseInt($('#manual_balance').val())+' credits.')
-		alert('saved');
+		update_history(localStorage.getItem('RU.credit')=='en'?'updated credit balance to '+parseInt($('#manual_balance').val())+' credits.':'saldo de crédito atualizado para '+parseInt($('#manual_balance').val())+' creditos.');
+		if(localStorage.getItem('RU.credit')>0){
+			alert('saved!! '+localStorage.getItem('RU.credit')+' Credits');
+		}else{
+			alert('Error!!');
+		}		
 	});
 	$('#clear_history').click(function(){
 	 localStorage.setItem('RU.history', null);
-	 update_history('cleared history');
+	 var msg = localStorage.getItem('RU.credit')=='en'?'cleared history':'história limpa';
+	 update_history(msg);
 	 alert('Clear!!');
 	});
 	
 	$('#reset').click(function(){
-	  if(confirm('Are you sure to reset ?') ){
+	  if(confirm(localStorage.getItem('RU.credit')=='en'?'Are you sure to reset ?':'Tem certeza de que redefiniu?') ){
 	    localStorage.removeItem('RU.history');
 	    localStorage.removeItem('RU.username');
 	    localStorage.removeItem('RU.redg_no');
@@ -398,5 +412,16 @@ $(document).ready(function(){
 });
 function close_floating_window(e){
  $('#'+e).hide();
+}
+
+function zoom_in_btn(side){
+	var z = parseInt($('#'+side).css('background-size'));	
+	z +=5;
+	$('#'+side).css('background-size',z+'% auto');
+}
+function zoom_out_btn(side){
+	var z = parseInt($('#'+side).css('background-size'));	
+	z -=5;
+	$('#'+side).css('background-size',z+'% auto');
 }
 </script>
