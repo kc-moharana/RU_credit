@@ -250,7 +250,7 @@ function zoom_out_btn(side){
 function update_history(info){
 	var dt = formatAMPM(new Date());
 	var h = {};
-	if(localStorage.getItem('RU.history') !== 'null'){
+	if(localStorage.getItem('RU.history') !== null){
 		h = JSON.parse(localStorage.getItem('RU.history'));
 	}
 	if(info.length>2){
@@ -260,6 +260,7 @@ function update_history(info){
 		localStorage.setItem('RU.history',JSON.stringify(h));
 		}
 	$('#balance_history').html('<li>.</li>');
+
 	for(var i=Object.keys(h).length-1;i>0; i--){
 	// DOnt show more than 20 entries 
 		if(Object.keys(h).length - 20 == i){
