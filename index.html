@@ -405,8 +405,7 @@ $(document).ready(function(){
 			localStorage.setItem('RU.credit',k+l);
 			//Assign credit balance to <p>
 			$('#net_balance').html(localStorage.getItem('RU.credit'));
-			update_history('recharged '+l+' credits.');
-			location.reload();
+			update_history('recharged '+l+' credits.');			
 		} else {
 			return;
 		}
