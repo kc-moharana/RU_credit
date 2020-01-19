@@ -310,7 +310,7 @@ $(document).ready(function(){
 	$('#BlncCrBtn').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
 	//<h4 id="CrHisH" class=> #balance_history
 	$('#CrHisH').empty();
-	$('#CrHisH').html(localStorage.getItem('RU.lang')=='en'?'<a href="#">History</a>':'<a href="#">História</a>');
+	$('#CrHisH').html(localStorage.getItem('RU.lang')=='en'?'<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-icon-plus ui-btn-icon-left ui-btn-inherit">History</a>':'<a href="#" class="ui-collapsible-heading-toggle ui-btn ui-icon-plus ui-btn-icon-left ui-btn-inherit">História</a>');
 	update_history('');	
 	$('#CrHisH').addClass("ui-collapsible-heading");
 	$('#CrBlncH1').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
