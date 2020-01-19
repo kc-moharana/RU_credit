@@ -1,4 +1,4 @@
-const images = ['RU','fox2','fox3','fox4'];
+const images = ['icon'];
 const imgElem = document.querySelector('img');
 
 function randomValueFromArray(array) {
@@ -8,14 +8,14 @@ function randomValueFromArray(array) {
 
 setInterval(function() {
   let randomChoice = randomValueFromArray(images);
-  imgElem.src = 'images/' + randomChoice + '.jpg';
+  imgElem.src = randomChoice + '.jpg';
 }, 2000)
 
 // Register service worker to control making site work offline
 
 if('serviceWorker' in navigator) {
   navigator.serviceWorker
-           .register('/pwa-examples/a2hs/sw.js')
+           .register('./sw.js')
            .then(function() { console.log('Service Worker Registered'); });
 }
 
@@ -34,16 +34,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
   addBtn.style.display = 'block';
 
   addBtn.addEventListener('click', (e) => {
-    // hide our user interface that shows our A2HS button
+    // hide our user interface that shows our RU  button
     addBtn.style.display = 'none';
     // Show the prompt
     deferredPrompt.prompt();
     // Wait for the user to respond to the prompt
     deferredPrompt.userChoice.then((choiceResult) => {
         if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the A2HS prompt');
+          console.log('User accepted the RU prompt');
         } else {
-          console.log('User dismissed the A2HS prompt');
+          console.log('User dismissed the RU prompt');
         }
         deferredPrompt = null;
       });

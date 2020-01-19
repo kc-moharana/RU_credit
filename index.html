@@ -180,13 +180,12 @@
 
 function load_help(){
 	var lang = localStorage.getItem('RU.lang');
-	if('en'){
-	$('#help_ol').html('<li>Comming soon.</li>');
+	if(lang === 'en'){
+		$('#help_ol').html('<li>Comming soon.</li>');
 	}
 	else{
 	$('#help_ol').html('<li>Comming soon ç.</li>');
 	}
-
 }
 
 // Formatted date and time
@@ -203,12 +202,20 @@ function formatAMPM(date) {
  return month + "/" + day + "/" + year + " " + hour + ":" +minute;  
 }
 
-function show_card(){
-  var side = 'RU.card_back';
-  //$('#card_preview').css('background','url('+localStorage.getItem(side)+')');
-  //$('#card_preview').css('background-size','100% 100%');
-  $('#card_preview').html('0000000000000');
+function close_floating_window(e){
+ $('#'+e).hide();
 }
+function zoom_in_btn(side){
+	var z = parseInt($('#'+side).css('background-size'));	
+	z +=5;
+	$('#'+side).css('background-size',z+'% auto');
+}
+function zoom_out_btn(side){
+	var z = parseInt($('#'+side).css('background-size'));	
+	z -=5;
+	$('#'+side).css('background-size',z+'% auto');
+}
+
 
 $(document).ready(function(){ 
 	load_help();
@@ -262,13 +269,13 @@ $(document).ready(function(){
 		$("#card_front").val(localStorage.getItem('RU.card_front'));
 		$('#card_frnt_status').html('&#9989;');
 		$('#card_frnt_status').css('color','green');
-		$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
+		$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:220px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.card_back') !== null ){
 		$("#card_back").val(localStorage.getItem('RU.card_back'));
 		$('#card_back_status').html('&#9989;');
 		$('#card_back_status').css('color','green');
-		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
+		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:220px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.lang') !== null ){
 		$("#lang").val(localStorage.getItem('RU.lang')).change();
@@ -348,9 +355,9 @@ $(document).ready(function(){
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
 		if(!(localStorage.getItem('RU.username') && localStorage.getItem('RU.card_front') && localStorage.getItem(card_barcode) )){
-			$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
+			$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:10%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
 			
-			$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
+			$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:10%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
 			
 			alert('User profile Saved');
 			location.reload();
@@ -447,21 +454,6 @@ $(document).ready(function(){
 	    alert('Reset successful!!');
 	    location.reload();
 	  }
-	});
-	
+	});	
 });
-function close_floating_window(e){
- $('#'+e).hide();
-}
-
-function zoom_in_btn(side){
-	var z = parseInt($('#'+side).css('background-size'));	
-	z +=5;
-	$('#'+side).css('background-size',z+'% auto');
-}
-function zoom_out_btn(side){
-	var z = parseInt($('#'+side).css('background-size'));	
-	z -=5;
-	$('#'+side).css('background-size',z+'% auto');
-}
 </script>
