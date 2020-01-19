@@ -316,7 +316,7 @@ $(document).ready(function(){
 	if(localStorage.getItem('RU.redg_no') !== null ){
 		$("#redg_no").val(localStorage.getItem('RU.redg_no'));
 	}
-	if(localStorage.getItem('RU.history') !== null ){
+	if(!localStorage.getItem('RU.history')){
 		update_history('');	
 	}	
 	if(localStorage.getItem('RU.card_front') !== null ){
