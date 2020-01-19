@@ -250,7 +250,7 @@ function zoom_out_btn(side){
 function update_history(info){
 	var dt = formatAMPM(new Date());
 	var h = {};
-	if(localStorage.getItem('RU.history')){
+	if(localStorage.getItem('RU.history').length > 3){
 		h = JSON.parse(localStorage.getItem('RU.history'));
 	}
 	if(info.length>2){
