@@ -259,7 +259,7 @@ function update_history(info){
 		h[k] = '<span style="font-weight:bold; margin-right: 10px;">'+dt+'</span>:  '+info;
 		localStorage.setItem('RU.history',JSON.stringify(h));
 		}
-	$('#balance_history').empty();
+	$('#balance_history').html('<li>.</li>');
 	for(var i=Object.keys(h).length-1;i>0; i--){
 	// DOnt show more than 20 entries 
 		if(Object.keys(h).length - 20 == i){
@@ -285,7 +285,7 @@ $(document).ready(function(){
 		$("#name").val(localStorage.getItem('RU.username'));
 	}
 	if(!('RU.history' in localStorage)){
-		localStorage.setItem('RU.history',null);
+		localStorage.setItem('RU.history','');
 	}
 	if(!('RU.lang' in localStorage)){
 		localStorage.setItem('RU.lang','pt');
@@ -405,7 +405,7 @@ $(document).ready(function(){
 			//Assign credit balance to <p>
 			$('#net_balance').html(localStorage.getItem('RU.credit'));
 			update_history('recharged '+l+' credits.');
-			window.reload();
+			location.reload();
 		} else {
 			return;
 		}
