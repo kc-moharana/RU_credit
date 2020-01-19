@@ -331,7 +331,7 @@ $(document).ready(function(){
 		$('#card_back_status').css('color','green');
 		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="margin-left:20px;width:5%;"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:220px;" alt="card_front"></div>');
 	}
-	if(localStorage.getItem('RU.lang') !== null ){
+	if(localStorage.getItem('RU.lang')){
 		$("#lang").val(localStorage.getItem('RU.lang')).change();
 	}
 	//Assign credit balance to <p>
