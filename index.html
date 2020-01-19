@@ -312,7 +312,7 @@ $(document).ready(function(){
 	$('#CrHisH').empty();
 	$('#CrHisH').html(localStorage.getItem('RU.lang')=='en'?'History':'História');
 	update_history('');	
-	//$('#CrHisH').addClass("ui-collapsible-heading");
+	$('#CrHisH').addClass("ui-collapsible-heading");
 	$('#CrBlncH1').html(localStorage.getItem('RU.lang')=='en'?'Credit Balance':'Balanco de credito' );
 	
 	if(localStorage.getItem('RU.redg_no') !== null ){
