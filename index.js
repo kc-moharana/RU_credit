@@ -1,15 +1,16 @@
 const images = ['icon'];
-const imgElem = document.querySelector('img');
+//const imgElem = document.querySelector('img');
 
 function randomValueFromArray(array) {
   let randomNo =  Math.floor(Math.random() * array.length);
   return array[randomNo];
 }
 
-setInterval(function() {
+/*setInterval(function() {
   let randomChoice = randomValueFromArray(images);
-  imgElem.src = randomChoice + '.jpg';
+  imgElem.src = './img/'+'icon'+ '.jpg';
 }, 2000)
+*/
 
 // Register service worker to control making site work offline
 

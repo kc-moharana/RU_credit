@@ -16,8 +16,8 @@
   <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css" />
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.mobile-1.4.5.min.js"></script>
-  <!-- CODELAB: Add the install script here -->
-  <script src="./sw.js"></script>
+  <script src="./index.js" defer></script>
+
   <style>
    .floating_window{
 	top:0; left:0; right:0;z-index:100;overflow: auto;
@@ -43,10 +43,26 @@
 	.popupCloseButton:hover {
 		background-color: #ccc;
 	}
+	.question{
+		display: block;
+		margin-top: 10px;
+		margin-bottom: 5px;
+		font-weight: bold;
+	}
+	.answer{
+		display: block;
+		margin-left: 5px;
+	}
+ .add-button {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+}
   </style>
  </head>
 
  <body>
+ <button class="add-button">Add to home screen</button>
   <div data-role="page" id='home'>
 	<header data-role="header">
 	<h1>RU-credits</h1>
@@ -181,10 +197,24 @@
 function load_help(){
 	var lang = localStorage.getItem('RU.lang');
 	if(lang === 'en'){
-		$('#help_ol').html('<li>Comming soon.</li>');
+		$('#help_ol').html('<li><p class="question">Is it an official app from UENF?</p><p class="answer">No.</p></li>');
+		$('#help_ol').append('<li><p class="question">Is it connected with UENF database over internet?<p class="answer">It works offline once installed in phone. It stores all data in your phone.</p></li>');
+		$('#help_ol').append('<li><p class="question">What it will do?<p class="answer">It will help you to manage your Resturant credits. You can check how many credits left in your account. It will keep a log of when you spend your credits. </p></li>');
+		$('#help_ol').append('<li><p class="question">How it will keep track of my credits?<p class="answer">You need to upload your image of your resturant card in this app. And use the app while purchasing credit and while entering the dining hall. As you interact with the app it will add or substract credits and keeps a track of it. </p></li>');
+		$('#help_ol').append('<li><p class="question">How can I install in my phone?<p class="answer"> This is an web app. So works on most of the modern day mobile browsers. You can visit the app website and <b>bookmark</b> the page. <br>If you are using Google chrome, then you can use it like a <b>normal app</b>. <br>Open the website in Chrome.<br>Go to <b>options &gt&gt</b> Click on <b>Add to home Screen</b> &gt&gt Click <b>Add</b><br> Check your phone home screen. <div ><img style="width:10%;" src="./img/install.gif" alt="Install gif"/></div></p></li>');
+		$('#help_ol').append('<li><p class="question">How to use this app?<p class="answer">Take pictures of your resturant card (both sides) in Landscape mode.<br>GO to settings.<br>Add your name, upload pictures. <br>Click on save.<br>When you want to buy credits click open the app, click on the *Recharge credit* button.<br>When you are entering dining hall click on *Spend 1 credit* button.</p></li>');
+		$('#help_ol').append('<li><p class="question">I missed to use my app. Can I edit the balance manually. <p class="answer">Go to settings &gt&gt Click on *Edit credit balance* button. </p></li>');
+		$('#help_ol').append('<li><p class="question">Hwo can I reset every thing?<p class="answer"> Go to settings &gt&gt Click on *Reset all* button. </p></li>');
 	}
 	else{
-	$('#help_ol').html('<li>Comming soon ç.</li>');
+	$('#help_ol').html('<li><p class="question">É um aplicativo oficial da UENF?</p><p class="answer">Não..</p></li>');
+	$('#help_ol').append('<li><p class="question">    Está conectado ao banco de dados UENF pela Internet?</p><p class="answer">No. Funciona offline depois de instalado no telefone. Ele armazena todos os dados no seu telefone.</p></li>');
+	$('#help_ol').append('<li><p class="question"> O que isso fará?</p><p class="answer">    Isso o ajudará a gerenciar seus créditos de restaurante. Você pode verificar quantos créditos restam na sua conta. Ele manterá um registro de quando você gasta seus créditos.</p></li>');
+	$('#help_ol').append('<li><p class="question">    Como ele acompanhará meus créditos?</p><p class="answer">Você precisa fazer o upload da sua imagem do seu cartão de restaurante neste aplicativo. E use o aplicativo ao comprar crédito e ao entrar no refeitório. À medida que você interage com o aplicativo, ele adiciona ou subtrai créditos e mantém um controle dele.</p></li>');
+	$('#help_ol').append('<li><p class="question">    Como posso instalar no meu telefone?</p><p class="answer"> Este é um aplicativo da web. Funciona assim na maioria dos navegadores móveis modernos. Você pode visitar o site do aplicativo e marcar a página como favorita.<br>Se você estiver usando o Google chrome, poderá usá-lo como um aplicativo normal.<br>Abra o site no Chrome.<br>Vá para opções &gt&gt Clique em Adicionar à tela inicial &gt&gt Clique em Adicionar<br>Verifique a tela inicial do telefone.<div ><img style="width:10%;" src="./img/install.gif" alt="Install gif"/></p></li>');
+	$('#help_ol').append('<li><p class="question">    Como usar este aplicativo?</p><p class="answer">    Tire fotos do seu cartão de restaurante (ambos os lados) no modo Paisagem.<br>  Vá para as configurações.<br>Adicione seu nome, faça upload de fotos.<br>Clique em salvar.<br>    Quando você quiser comprar créditos, clique em abrir o aplicativo, clique no botão * Recarregar crédito *.<br>Ao entrar no refeitório, clique no botão * Gastar 1 crédito *.</p></li>');
+	$('#help_ol').append('<li><p class="question">    Eu senti falta de usar meu aplicativo. Posso editar a balança manualmente.</p><p class="answer">    Vá para configurações >> Clique no botão * Editar saldo de crédito *.</p></li>');
+	$('#help_ol').append('<li><p class="question">    Como posso redefinir tudo?</p><p class="answer">Vá para configurações >> Clique no botão * Redefinir tudo *</p></li>');
 	}
 }
 
@@ -269,13 +299,13 @@ $(document).ready(function(){
 		$("#card_front").val(localStorage.getItem('RU.card_front'));
 		$('#card_frnt_status').html('&#9989;');
 		$('#card_frnt_status').css('color','green');
-		$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:220px;" alt="card_front"></div>');
+		$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="margin-left:20px;width:5%;"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:220px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.card_back') !== null ){
 		$("#card_back").val(localStorage.getItem('RU.card_back'));
 		$('#card_back_status').html('&#9989;');
 		$('#card_back_status').css('color','green');
-		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:3%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:220px;" alt="card_front"></div>');
+		$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="margin-left:20px;width:5%;"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:220px;" alt="card_front"></div>');
 	}
 	if(localStorage.getItem('RU.lang') !== null ){
 		$("#lang").val(localStorage.getItem('RU.lang')).change();
@@ -354,11 +384,7 @@ $(document).ready(function(){
 		//localStorage.setItem('RU.redg_no', $("#redg_no").val());
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
-		if(!(localStorage.getItem('RU.username') && localStorage.getItem('RU.card_front') && localStorage.getItem(card_barcode) )){
-			$('#card_frnt_status').append('<a href="#card_frnt_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" alt="card_front" style="width:10%"></a>'+'<div data-role="popup" id="card_frnt_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_front')+'" style="max-height:200px;" alt="card_front"></div>');
-			
-			$('#card_back_status').append('<a href="#card_back_tiny" data-rel="popup" data-position-to="window" data-transition="fade"><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" alt="card_front" style="width:10%"></a>'+'<div data-role="popup" id="card_back_tiny" data-overlay-theme="b" data-theme="b" data-corners="false"><a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right" >Close</a><img class="popphoto" src="'+localStorage.getItem('RU.card_back')+'" style="max-height:200px;" alt="card_front"></div>');
-			
+		if(!(localStorage.getItem('RU.username') && localStorage.getItem('RU.card_front') && localStorage.getItem(card_barcode) )){			
 			alert('User profile Saved');
 			location.reload();
 		}else{
@@ -438,7 +464,6 @@ $(document).ready(function(){
 	$('#clear_history').click(function(){
 	 localStorage.setItem('RU.history', null);
 	 var msg = localStorage.getItem('RU.credit')=='en'?'cleared history':'história limpa';
-	 update_history(msg);
 	 alert('Clear!!');
 	});
 	
