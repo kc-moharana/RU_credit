@@ -390,7 +390,8 @@ $(document).ready(function(){
 	}); 
 	$("#buy_cr_shw_frnt").click(function(){
 		if(!localStorage.getItem('RU.card_front')){
-			alert('Error!!.. ');
+			var msg = localStorage.getItem('RU.lang') == 'en'?'Update card details!!':'Atualizar detalhes do cartão';
+			alert('Error!!.. '+msg);
 			return false;
 		}
 		var msg = localStorage.getItem('RU.lang') == 'en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
