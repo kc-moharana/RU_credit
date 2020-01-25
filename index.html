@@ -414,7 +414,7 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',k+l);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('&plus;'+l+' credits.');	
+				update_history('&plus; '+l+' credits.');	
 				$('#show_card_frnt').css('position','absolute');		
 				//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
 				$('#show_card_frnt').css('display','inline-block');
@@ -447,7 +447,7 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('&plus;1 credit.');
+				update_history('&minus;1 credit.');
 				
 				// Show card 
 				$('#show_card_back').css('position','absolute');		
@@ -496,7 +496,7 @@ $(document).ready(function(){
 			localStorage.removeItem('RU.card_front' );
 			localStorage.removeItem('RU.lang');
 			//alert('Reset successful!!');
-			$.jAlert('Reset successful!!');
+			$.jAlert('Reset successful!!','Alert');
 			location.reload();
 		  }
 	  });
