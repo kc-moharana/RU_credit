@@ -413,7 +413,7 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',k+l);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('+'+l+' credits.');			
+				update_history('&plus;'+l+' credits.');			
 			} else {
 				return;
 			}
@@ -446,7 +446,7 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('-1 credit.')
+				update_history('&plus;1 credit.')
 			
 			}else{
 				return;
