@@ -391,16 +391,16 @@ $(document).ready(function(){
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
 		if(!(localStorage.getItem('RU.username') && localStorage.getItem('RU.card_front') && localStorage.getItem(card_barcode) )){			
-			alert('User profile Saved');
+			$.jAlert('User profile Saved','Alert');
 			location.reload();
 		}else{
-			alert('Error..');
+			$.jAlert('Error..','Alert');
 		}		
 	}); 
 	$("#buy_cr_shw_frnt").click(function(){
 		if(!localStorage.getItem('RU.card_front')){
 			var msg = localStorage.getItem('RU.lang') == 'en'?'Update card details!!':'Atualizar detalhes do cartão';
-			alert('Error!!.. '+msg);
+			$.jAlert('Error!!.. '+msg,'Alert');
 			return false;
 		}
 		var msg = localStorage.getItem('RU.lang') == 'en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
