@@ -4,7 +4,7 @@
     "name": "RU credit",
     "scope": "/ru-credit/",
     "display": "standalone",
-    "start_url": "./ru-credit/index.html",
+    "start_url": "/ru-credit/index.html",
     "short_name": "RU credit",
     "theme_color": "#3367D6",
 	"background_color": "#3367D6",
