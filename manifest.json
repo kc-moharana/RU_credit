@@ -13,12 +13,12 @@
     "related_applications": [],
     "prefer_related_applications": false,
 	"serviceworker": {
-		"src": "./sw.js"
+		"src": "/ru-credit/sw.js"
 		},
-    "icons": [{"src": "./img/icon.png",
-				"sizes": "51x51"
+    "icons": [{"src": "/ru-credit/img/icon.png",
+				"sizes": "151x151"
 			},
-			{"src": "./img/icon.svg",
+			{"src": "/ru-credit/img/icon.svg",
 			"sizes": "48x48 51x51 72x72",     
 			"purpose":"badge"
 			}],
