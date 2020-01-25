@@ -11,8 +11,10 @@ self.addEventListener('install', function(e) {
                 './css/jquery.mobile-1.4.5.min.css',
                 './css/jquery.mobile.theme-1.4.5.min.css',
 				'./css/jquery.mobile.icons-1.4.5.min.css',
+				'./css/images/ajax-loader.gif',
                 './js/jquery.min.js',
-                './js/jquery.mobile-1.4.5.min.js',				
+                './js/jquery.mobile-1.4.5.min.js',	
+				'js/jqmDialog.min.js',
                 './img/icon.jpg',
 				'./img/icon.svg',
                 './index.html'
