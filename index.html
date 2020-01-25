@@ -143,7 +143,7 @@
 		  <div class="ui-body ui-body-a ui-corner-all">
 		  <h3 id='userProfH3'>Detalhes do usuario</h3>
 			<form>
-			<input type="text" name="name" id="name" placeholder="Name/Nome" autocomplete="off"/>
+			<input type="text" name="user_name" id="user_name" placeholder="Name/Nome" autocomplete="off"/>
 			  <div class="ui-body ui-body-a ui-corner-all">
 				<h3 id='ImgUpload_H'>Upload image</h3>
 					<p id='ImgUpload_lab'>
@@ -282,8 +282,11 @@ $(document).ready(function(){
 	if(!('RU.credit' in localStorage)){ //unused credit
 		localStorage.setItem('RU.credit',0);
 	}
-	if('RU.username' in localStorage){
-		$("#name").val(localStorage.getItem('RU.username'));
+	if(!('RU.username' in localStorage)){ //
+		localStorage.setItem('RU.username','');
+	}else
+	{
+		$("#user_name").val(localStorage.getItem('RU.username'));
 	}
 	if(!('RU.history' in localStorage)){
 		localStorage.setItem('RU.history','');
@@ -381,7 +384,7 @@ $(document).ready(function(){
 	});
 	
 	$("#save_user_data").click(function(){
-		localStorage.setItem('RU.username', $("#name").val() );
+		localStorage.setItem('RU.username', $("#username").val());
 		//localStorage.setItem('RU.redg_no', $("#redg_no").val());
 		//localStorage.setItem('RU.card_front', $("#card_user_details").val());
 		//localStorage.setItem('RU.card_back', $("#card_barcode").val());
