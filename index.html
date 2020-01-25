@@ -414,19 +414,19 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',k+l);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('&plus;'+l+' credits.');			
+				update_history('&plus;'+l+' credits.');	
+				$('#show_card_frnt').css('position','absolute');		
+				//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
+				$('#show_card_frnt').css('display','inline-block');
+				$('#show_card_frnt').css('width','100%');
+				$('#show_card_frnt').css('height','100%');
+				$('#show_card_frnt').css('border','solid 1px #ccc');
+				$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'") no-repeat center #ccc');
+				$('#show_card_frnt').css('background-size','60% auto');				
 			} else {
 				return;
 			}
-		});
-		$('#show_card_frnt').css('position','absolute');		
-		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
-		$('#show_card_frnt').css('display','inline-block');
-		$('#show_card_frnt').css('width','100%');
-		$('#show_card_frnt').css('height','100%');
-		$('#show_card_frnt').css('border','solid 1px #ccc');
-		$('#show_card_frnt').css('background','url("'+localStorage.getItem('RU.card_front')+'") no-repeat center #ccc');
-		$('#show_card_frnt').css('background-size','60% auto');
+		});		
 		//alert($('#show_card_frnt').html());
 	});
 	
@@ -447,23 +447,24 @@ $(document).ready(function(){
 				localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
 				//Assign credit balance to <p>
 				$('#net_balance').html(localStorage.getItem('RU.credit'));
-				update_history('&plus;1 credit.')
-			
+				update_history('&plus;1 credit.');
+				
+				// Show card 
+				$('#show_card_back').css('position','absolute');		
+				//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
+				$('#show_card_back').css('display','inline-block');
+				$('#show_card_back').css('width','100%');
+				$('#show_card_back').css('height','100%');
+				$('#show_card_back').css('border','solid 1px #ccc');
+				$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'") no-repeat center #ccc');
+				$('#show_card_back').css('background-size','60% auto');
+				//alert($('#show_card_frnt').html());			
 			}else{
 				return;
 			}          
-        });
-		// Show card 
-		$('#show_card_back').css('position','absolute');		
-		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
-		$('#show_card_back').css('display','inline-block');
-		$('#show_card_back').css('width','100%');
-		$('#show_card_back').css('height','100%');
-		$('#show_card_back').css('border','solid 1px #ccc');
-		$('#show_card_back').css('background','url("'+localStorage.getItem('RU.card_back')+'") no-repeat center #ccc');
-		$('#show_card_back').css('background-size','60% auto');
-		//alert($('#show_card_frnt').html());
+        });		
 	});
+	
 	$('#save_manual_edit_credit').click(function(){		
 		localStorage.setItem('RU.credit', parseInt($('#manual_balance').val())) ;
 		$('#net_balance').html(localStorage.getItem('RU.credit'));
@@ -476,6 +477,7 @@ $(document).ready(function(){
 			//alert('Error!!');
 		}		
 	});
+	
 	$('#clear_history').click(function(){
 	 localStorage.setItem('RU.history', null);
 	 var msg = localStorage.getItem('RU.credit')=='en'?'cleared history':'história limpa';
