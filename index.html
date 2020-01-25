@@ -403,19 +403,21 @@ $(document).ready(function(){
 			return false;
 		}
 		var msg = localStorage.getItem('RU.lang') == 'en'?'Are you sure you want to buy credits? Enter how many credits you will buy.':'Tem certeza de que deseja comprar créditos? Digite quantos créditos você comprará.';
-		var how_many = prompt(msg);
-		if (how_many) {
-			// Save it!
-			var k = parseInt(localStorage.getItem('RU.credit'));
-			k = k<0?0:k;
-			var l = parseInt(how_many);
-			localStorage.setItem('RU.credit',k+l);
-			//Assign credit balance to <p>
-			$('#net_balance').html(localStorage.getItem('RU.credit'));
-			update_history('recharged '+l+' credits.');			
-		} else {
-			return;
-		}
+		
+		$.jPrompt(msg,"", "Prompt",function(how_many){        
+			if (how_many) {
+				// Save it!
+				var k = parseInt(localStorage.getItem('RU.credit'));
+				k = k<0?0:k;
+				var l = parseInt(how_many);
+				localStorage.setItem('RU.credit',k+l);
+				//Assign credit balance to <p>
+				$('#net_balance').html(localStorage.getItem('RU.credit'));
+				update_history('+'+l+' credits.');			
+			} else {
+				return;
+			}
+		});
 		$('#show_card_frnt').css('position','absolute');		
 		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
 		$('#show_card_frnt').css('display','inline-block');
@@ -430,23 +432,27 @@ $(document).ready(function(){
 	
 	$("#buy_cr_shw_bck").click(function(){
 		if(!localStorage.getItem('RU.card_back')){
-			alert('Error!!.. ');
+			$.jAlert("Error!!!", "Alert");			
 			return false;
 		}
 		if(localStorage.getItem('RU.credit')<=0){
-			alert('Error: Credits 0!!!');
+			$.jAlert("Error: Credits 0!!!", "Alert");
 			return false;
 		}
 		var msg = localStorage.getItem('RU.lang')=='en'?'Are you sure you want to spend 1 credit?':'Tem certeza de que deseja gastar 1 crédito??';
-		if (confirm(msg)) {
-			// Save it!
-			localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
-			//Assign credit balance to <p>
-			$('#net_balance').html(localStorage.getItem('RU.credit'));
-			update_history('spent 1 credit.')
-		} else {
-			return;
-		}
+		$.jConfirm(msg, "Confirm",function(result){
+			if(result){
+				// Save it!
+				localStorage.setItem('RU.credit',localStorage.getItem('RU.credit')-1);
+				//Assign credit balance to <p>
+				$('#net_balance').html(localStorage.getItem('RU.credit'));
+				update_history('-1 credit.')
+			
+			}else{
+				return;
+			}          
+        });
+		// Show card 
 		$('#show_card_back').css('position','absolute');		
 		//$('#show_card_frnt').html('**<img src="'+localStorage.getItem('RU.card_front')+'" alt="front"/>');
 		$('#show_card_back').css('display','inline-block');
@@ -462,29 +468,35 @@ $(document).ready(function(){
 		$('#net_balance').html(localStorage.getItem('RU.credit'));
 		update_history(localStorage.getItem('RU.credit')=='en'?'updated credit balance to '+parseInt($('#manual_balance').val())+' credits.':'saldo de crédito atualizado para '+parseInt($('#manual_balance').val())+' creditos.');
 		if(localStorage.getItem('RU.credit')>0){
-			alert('saved!! '+localStorage.getItem('RU.credit')+' Credits');
+			$.jAlert('saved!! '+localStorage.getItem('RU.credit')+' Credits', "Alert");
+			//alert('saved!! '+localStorage.getItem('RU.credit')+' Credits');
 		}else{
-			alert('Error!!');
+			$.jAlert('Error !!! ', "Alert");
+			//alert('Error!!');
 		}		
 	});
 	$('#clear_history').click(function(){
 	 localStorage.setItem('RU.history', null);
 	 var msg = localStorage.getItem('RU.credit')=='en'?'cleared history':'história limpa';
-	 alert('Clear!!');
+	 //alert('Clear!!');
+	 $.jAlert(msg,'Alert');
 	});
 	
 	$('#reset').click(function(){
-	  if(confirm(localStorage.getItem('RU.credit')=='en'?'Are you sure to reset ?':'Tem certeza de que redefiniu?') ){
-	    localStorage.removeItem('RU.history');
-	    localStorage.removeItem('RU.username');
-	    localStorage.removeItem('RU.redg_no');
-	    localStorage.removeItem('RU.credit');
-	    localStorage.removeItem('RU.card_back' );
-	    localStorage.removeItem('RU.card_front' );
-	    localStorage.removeItem('RU.lang');
-	    alert('Reset successful!!');
-	    location.reload();
-	  }
+		$.jConfirm(localStorage.getItem('RU.credit')=='en'?'Are you sure to reset ?':'Tem certeza de que redefiniu?', "Confirm",function(result){       
+		  if(result){
+			localStorage.removeItem('RU.history');
+			localStorage.removeItem('RU.username');
+			localStorage.removeItem('RU.redg_no');
+			localStorage.removeItem('RU.credit');
+			localStorage.removeItem('RU.card_back' );
+			localStorage.removeItem('RU.card_front' );
+			localStorage.removeItem('RU.lang');
+			//alert('Reset successful!!');
+			$.jAlert('Reset successful!!');
+			location.reload();
+		  }
+	  });
 	});	
 });
 </script>
